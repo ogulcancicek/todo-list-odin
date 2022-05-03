@@ -1,22 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;1,100&display=swap');
 
 *,html{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+    font-style: italic;
 }
 
 :root{
-    --darkBackgroundColor: rgb(26, 26, 26);
-    --lightBackgroundColor: rgb(238, 238, 238);
-    --darkTextColor: rgb(228, 228, 228);
-    --lightTextColor: rgb(26, 26, 26)
+    --darkBackgroundColor: rgb(37, 37, 37);
+    --lightBackgroundColor: rgb(208, 208, 208);
+    --darkTextColor: rgb(208, 208, 208);
+    --lightTextColor: rgb(37, 37, 37);
+    --specialColor: rgb(255, 85, 0);
+}
+
+::selection{
+    background: var(--specialColor);
 }
 
 body{
     background-color: var(--lightBackgroundColor);
     color: var(--lightTextColor);
-    font-family: 'Lato', sans-serif;
+    
 }
 
 body.dark{
@@ -47,12 +54,13 @@ nav.dark{
     width: 35px;
     border: 0;
     background-color: transparent;
-    color: rgb(255, 85, 0);
+    color: var(--specialColor);
 }
 
 .text-logo{
     font-size: 2rem;
     margin-top: 5px;
+    font-style: normal;
 }
 
 .checkbox {
@@ -92,15 +100,9 @@ nav.dark{
 
 .fas{
     font-size: 12px;
+    color: var(--darkTextColor);
 }
 
-.fa-moon {
-    color: pink;
-}
-  
-.fa-sun {
-    color: yellow;
-}
 
 .app-container{
     width: 100%;
@@ -110,17 +112,108 @@ nav.dark{
 
 .sidebar{
     display: none;
-    width: 300px;
-    height: calc(100vh - 100px);
+    width: 250px;
+    height: calc(100vh - 130px);
     border-right: 1px solid;
 }
 .active{
-    display: block;
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+    margin: 15px 0 15px 0;
+}
+
+.sidebar-item-container{
+    position: relative;
+    grid-row: 1/2;
+    width: 85%;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border-bottom: 1px solid;
+}
+
+.sidebar-item{
+    width: 80%;
+    border: 0px;
+    background-color: transparent;
+    border-radius: 50px;
+    padding: 5px;
+}
+
+.sidebar-item.dark{
+    color: var(--darkTextColor);
+}
+
+.sidebar-item:hover{
+    background-color: var(--darkBackgroundColor);
+    color: var(--darkTextColor);
+}
+
+.sidebar-item.dark:hover{
+    background-color: var(--lightBackgroundColor);
+    color: var(--lightTextColor);
+}
+
+.user-projects{
+    grid-row: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-projects-title{
+    font-size: 1.5rem;
+    font-style: normal;
+    margin-top: 10px;
 }
 
 .todo-container{
     width: 100%;
     height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.todo-content-container{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.todo-list-title{
+    font-style: normal;
+    margin-top: 10px;
+    padding-left: 10px;
+}
+
+.task-add-btn{
+    text-align: left;
+    font-style: normal;
+    padding-left: 10px;
+    height: 40px;
+    border-radius: 50px;
+    border: 0;
+    background-color: transparent;
+}
+
+.task-add-btn:hover{
+    background-color: var(--darkBackgroundColor);
+    color: var(--darkTextColor);
+}
+
+.task-add-btn.dark{
+    color: var(--darkTextColor);
+}
+
+.task-add-btn.dark:hover{
+    background-color: var(--lightBackgroundColor);
+    color: var(--lightTextColor);
 }
 
 footer{

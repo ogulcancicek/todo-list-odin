@@ -65,7 +65,10 @@ const displayController = ((doc) => {
 
     const createSideBar = () => {
         const sidebar = doc.createElement('div');
-        sidebar.classList.add('sidebar');
+        sidebar.classList.add('sidebar','active');
+
+        // Append sidebar content into sidebar
+        createSidebarContent(sidebar);
 
         return sidebar;
     }
@@ -83,6 +86,54 @@ const displayController = ((doc) => {
         return footer;
     }
 
+    const createSidebarContent = (sidebar) => {
+        // Create sidebar buttons
+        const itemContainer = doc.createElement('div');
+        itemContainer.classList.add('sidebar-item-container');
+        const sidebarItems = ['Inbox', 'Today', 'This Week'];
+        for (let item of sidebarItems){
+            const sideItem = doc.createElement('button');
+            sideItem.classList.add('sidebar-item');
+            sideItem.textContent = item;
+            itemContainer.appendChild(sideItem);
+        }
+        sidebar.append(itemContainer);
+
+        // Create user project buttons
+        const userPorjectsContainer = doc.createElement('div');
+        userPorjectsContainer.classList.add('user-projects');
+
+        const projectTitle = doc.createElement('h1');
+        projectTitle.textContent = "Projects";
+        projectTitle.classList.add('user-projects-title');
+
+        const projectAddBtn = doc.createElement('button');
+        projectAddBtn.classList.add('sidebar-item','project-add-btn');
+        projectAddBtn.innerHTML = '<i class="fa-solid fa-plus"></i>  Add Project';
+
+        userPorjectsContainer.appendChild(projectTitle);
+        userPorjectsContainer.appendChild(projectAddBtn);
+        sidebar.appendChild(userPorjectsContainer);
+    }
+
+    const createTodoAppContent = (currentListTitle, content = []) => {
+        const contentContainer = doc.createElement('div');
+        contentContainer.classList.add('todo-content-container');
+
+        const listTitle = doc.createElement('h1');
+        listTitle.classList.add('todo-list-title');
+        listTitle.textContent = currentListTitle;
+
+        const taskAddBtn = doc.createElement('button');
+        taskAddBtn.classList.add('task-add-btn');
+        taskAddBtn.innerHTML = '<i class="fa-solid fa-plus"></i>  Add Task';
+
+        contentContainer.appendChild(listTitle);
+        contentContainer.appendChild(taskAddBtn);
+
+        return contentContainer;
+    }
+
 
     const displayNavBar = () => CONTENT_COTNAINER.appendChild(createNavBar());
     const displayThemeCheckbox = () => {
@@ -91,7 +142,11 @@ const displayController = ((doc) => {
 
         themeToggleBtn.addEventListener('change', ()=>{
             doc.body.classList.toggle('dark');
-            doc.querySelector('toggle-btn').classList.toggle('dark');
+            doc.querySelector('.toggle-btn').classList.toggle('dark');
+            doc.querySelectorAll('.sidebar-item').forEach((sideItem) => {
+                sideItem.classList.toggle('dark');
+            });
+            doc.querySelector('.task-add-btn').classList.toggle('dark');
         });
         
         navbarContent.appendChild(themeToggleBtn);
@@ -116,7 +171,14 @@ const displayController = ((doc) => {
 
     const displayTodoApp = () => {
         const appContainer = doc.querySelector('.app-container');
-        appContainer.appendChild(createToDoContainer());
+        const todoContainer = createToDoContainer();
+        displayTodoAppContent(todoContainer);
+        appContainer.appendChild(todoContainer);
+    }
+
+    const displayTodoAppContent = (todoContainer) => {
+        const todoContentContainer = createTodoAppContent("Inbox");
+        todoContainer.appendChild(todoContentContainer);
     }
 
     const displayFooter = () => CONTENT_COTNAINER.appendChild(createFooter());
