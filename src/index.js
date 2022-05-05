@@ -1,8 +1,3 @@
-import displayController from "./display_controller";
+import WebsiteController from "./website";
 
-displayController.displayNavBar();
-displayController.displayToggleBtn();
-displayController.displayNavLogo();
-displayController.displayThemeCheckbox();
-displayController.displaySidebar();
-displayController.displayFooter();
+WebsiteController.initializeWebsite();

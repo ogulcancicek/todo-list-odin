@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;1,100&display=swap');
 
-*,html{
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -163,6 +163,15 @@ nav.dark{
     flex-direction: column;
     align-items: center;
     gap: 5px;
+
+    /* hide scrollbar but allow scrolling */
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll; 
+}
+
+.user-projects::-webkit-scrollbar{
+    display: none; /* for Chrome, Safari, and Opera */
 }
 
 .user-projects-title{
@@ -171,13 +180,68 @@ nav.dark{
     margin-top: 10px;
 }
 
+.project-add-btn.active{
+    display: none;
+}
+
+.input-popup{
+    display: none;
+    width: 85%;
+}
+
+.input-popup.active{
+    display: block;
+}
+
+.input-popup > input{
+    width: 100%;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    border: 0;
+    text-indent: 10px;
+}
+
+.input-popup > input:focus{
+    outline: 0;
+}
+
+.input-buttons{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+
+.input-buttons > button{
+    margin-top: 5px;
+    padding: 2px;
+    border: 0;
+}
+
+#add-btn{
+    background-color: rgba(148, 254, 148, 0.7);
+}
+
+#cancel-btn{
+    background-color: rgba(255, 122, 122, 0.7);
+}
+
 .todo-container{
     width: 100%;
     height: calc(100vh - 100px);
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    /* hide scrollbar but allow scrolling */
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll; 
 }
+
+.todo-container::-webkit-scrollbar{
+    display: none; /* for Chrome, Safari, and Opera */
+}
+
 
 .todo-content-container{
     width: 80%;
@@ -216,6 +280,58 @@ nav.dark{
     color: var(--lightTextColor);
 }
 
+.task-add-btn.active{
+    display: none;
+}
+
+.task-popup{
+    width: 100%;
+}
+
+.task-popup > input{
+    height: 40px;
+}
+
+.task-popup > .input-buttons > button{
+    height: 40px;
+}
+
+.task-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 50px;
+    border: 1px solid;
+    border-radius: 10px;
+}
+
+.task-option-container{
+    display: flex;
+    gap: 5px;
+    margin-right: 4px;
+}
+
+.task-option-container > button{
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 10px;
+    font-style: normal;
+    font-size: 1.3rem;
+}
+
+.task-remove-button{
+    background-color: rgba(255, 122, 122, 0.7);
+}
+
+.task-title{
+    max-width: 80%;
+    margin-left: 10px;
+    font-style: normal;
+    margin-bottom: 0;
+}
+
 footer{
     display: flex;
     justify-content: center;
@@ -233,8 +349,17 @@ footer{
 }
 
 @media screen and (max-width: 650px) {
+    .text-logo{
+        font-size: 1rem;
+    }
+
     .app-container{
+        height: calc(100vh - 83.5px);
         flex-direction: column;
+    }
+
+    .task-title{
+        font-size: 0.7rem;
     }
 
     .sidebar{
