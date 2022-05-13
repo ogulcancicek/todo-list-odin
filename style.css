@@ -1,0 +1,447 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;1,100&display=swap');
+
+*,html{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+    font-style: italic;
+}
+
+:root{
+    --darkBackgroundColor: rgb(37, 37, 37);
+    --lightBackgroundColor: rgb(208, 208, 208);
+    --darkTextColor: rgb(208, 208, 208);
+    --lightTextColor: rgb(37, 37, 37);
+    --specialColor: rgb(255, 85, 0);
+    --mobile-sidebarbg-light: rgb(180, 180, 180);
+    --mobile-sidebarbg-dark: rgb(45, 45, 45);
+}
+
+body{
+    background-color: var(--lightBackgroundColor);
+    color: var(--lightTextColor);
+    
+}
+
+body.dark{
+    background-color: var(--darkBackgroundColor);
+    color: var(--darkTextColor);
+}
+
+nav{
+    border-bottom: 1px solid;
+}
+
+nav.light{
+    border-color: var(--lightTextColor);
+}
+
+nav.dark{
+    border-color: var(--darkTextColor);
+}
+
+.nav-content{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-btn{
+    height: 35px;
+    width: 35px;
+    border: 0;
+    background-color: transparent;
+    color: var(--specialColor);
+}
+
+.text-logo{
+    font-size: 2rem;
+    margin-top: 5px;
+    font-style: normal;
+}
+
+.checkbox {
+    opacity: 0;
+    position: absolute;
+}
+
+.label {
+    width: 40px;
+    height: 20px;
+    background-color:#111;
+    display: flex;
+    border-radius:50px;
+    border: 1px solid var(--darkTextColor);
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    position: relative;
+    transform: scale(1.5);
+  }
+  
+.ball {
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    border-radius: 50%;
+    transition: transform 0.2s linear;
+}
+  
+  /*  target the elemenent after the label*/
+.checkbox:checked + .label .ball{
+    transform: translateX(18px);
+}
+
+.fas{
+    font-size: 12px;
+    color: var(--darkTextColor);
+}
+
+
+.app-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar{
+    display: none;
+    width: 250px;
+    min-height: calc(100vh - 130px);
+    border-right: 1px solid;
+}
+.active{
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+    margin: 15px 0 15px 0;
+}
+
+.sidebar-item-container{
+    position: relative;
+    grid-row: 1/2;
+    width: 85%;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border-bottom: 1px solid;
+}
+
+.sidebar-item{
+    width: 80%;
+    border: 0px;
+    background-color: transparent;
+    border-radius: 50px;
+    padding: 5px;
+}
+
+.sidebar-item.dark{
+    color: var(--darkTextColor);
+}
+
+.sidebar-item:hover{
+    background-color: var(--darkBackgroundColor);
+    color: var(--darkTextColor);
+}
+
+.sidebar-item.dark:hover{
+    background-color: var(--lightBackgroundColor);
+    color: var(--lightTextColor);
+}
+
+.user-projects{
+    grid-row: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-projects-title{
+    font-size: 1.5rem;
+    font-style: normal;
+    margin-top: 10px;
+}
+
+.project-add-btn.active{
+    display: none;
+}
+
+.input-popup{
+    display: none;
+    width: 85%;
+}
+
+.input-popup.active{
+    display: block;
+}
+
+.input-popup > input{
+    width: 100%;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    border: 0;
+    text-indent: 10px;
+}
+
+.input-popup > input:focus{
+    outline: 0;
+}
+
+.input-buttons{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+
+.input-buttons > button{
+    margin-top: 5px;
+    padding: 2px;
+    border: 0;
+}
+
+#add-btn{
+    background-color: rgba(148, 254, 148, 0.7);
+}
+
+#cancel-btn{
+    background-color: rgba(255, 122, 122, 0.7);
+}
+
+.todo-container{
+    width: 100%;
+    min-height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.todo-content-container{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.todo-list-title{
+    font-style: normal;
+    margin-top: 10px;
+    padding-left: 10px;
+}
+
+.task-add-btn{
+    text-align: left;
+    font-style: normal;
+    padding-left: 10px;
+    height: 40px;
+    border-radius: 50px;
+    border: 0;
+    background-color: transparent;
+}
+
+.task-add-btn:hover{
+    background-color: var(--darkBackgroundColor);
+    color: var(--darkTextColor);
+}
+
+.task-add-btn.dark{
+    color: var(--darkTextColor);
+}
+
+.task-add-btn.dark:hover{
+    background-color: var(--lightBackgroundColor);
+    color: var(--lightTextColor);
+}
+
+.task-add-btn.active{
+    display: none;
+}
+
+.task-popup{
+    width: 100%;
+}
+
+.task-popup > input{
+    height: 40px;
+}
+
+.task-popup > .input-buttons > button{
+    height: 40px;
+}
+
+.task-container{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 50px;
+    border: 1px solid;
+    border-radius: 10px;
+}
+
+.task-option-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    margin-right: 4px;
+}
+
+.task-remove-button{
+    background-color: rgba(255, 122, 122, 0.7);
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 10px;
+    font-style: normal;
+    font-size: 1.3rem;
+}
+
+.due-date{
+    cursor: pointer;
+    height: 100%;
+    padding-top: 15px;
+    font-size: 0.8rem;
+}
+
+.due-date.active{
+    display: none;
+}
+
+.task-date-input{
+    display: none;
+    width: 75px;
+    font-size: 0.8rem;
+    font-style: normal;
+    height: 20px;
+}
+
+.task-date-input.active{
+    display: inline;
+}
+
+.task-title-container{
+    max-width: 70%;
+}
+
+.task-title{
+    margin-left: 10px;
+    font-style: normal;
+    margin-bottom: 0;
+}
+
+.task-title.active{
+    display: none;
+}
+
+.task-title-input{
+    display: none;
+    margin-left: 10px;
+    width: 200px;
+    border-radius: 10px;
+    border: 0;
+    text-indent: 10px;
+}
+
+.task-title-input:focus{
+    outline: 0;
+}
+
+.task-title-input.active{
+    display: inline;
+}
+
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 47.5px;
+    background-color: var(--darkBackgroundColor);
+    color: var(--darkTextColor);
+    border-top: 1px solid;
+}
+
+.footer-text{
+    margin-top: 15px;
+    font-size: 1.2rem;
+}
+
+@media screen and (max-width: 650px) {
+    .text-logo{
+        font-size: 1rem;
+    }
+
+    .app-container{
+        min-height: calc(100vh - 83.5px);
+        flex-direction: column;
+    }
+
+    .task-title{
+        font-size: 0.7rem;
+    }
+
+    .sidebar{
+        width: 100%;
+        min-height: 100px;
+        border-right: 0;
+        border-bottom: 0;
+        background-color: var(--mobile-sidebarbg-light);
+        margin-top: 0;
+    }
+
+    .sidebar.dark{
+        background-color: var(--mobile-sidebarbg-dark);
+    }
+
+    .sidebar-item-container{
+        width: 100%;
+        left: 0;
+        gap: 10px;
+        border-bottom: 0;
+    }
+    
+    .sidebar-item{
+        width: 80%;
+        border: 0px;
+        background-color: transparent;
+        border-radius: 50px;
+        text-align: left;
+    }
+
+    .user-projects{
+        margin-top: 10px;
+        gap: 5px;
+    }
+
+    .user-projects-title{
+        width: 80%;
+        text-decoration: underline;
+        font-size: 1rem;
+        font-style: normal;
+        margin-top: 10px;
+    }
+    .todo-container{
+        width: 100%;
+    }
+    .todo-content-container{
+        width: 90%;
+    }
+    .task-remove-button{
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+
+    .footer-text{
+        font-size: 0.7rem;
+    }
+}
