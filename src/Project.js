@@ -4,16 +4,29 @@ class Project {
         this.tasks = [];
     }
 
-    get getProjectTasks(){
+    getTasks(){
         return this.tasks;
     }
 
-    appendNewTask(task){
-        this.tasks.push(task);
+    setTasks(tasks){
+        this.tasks = tasks;
     }
 
-    removeTask(task){
+    getTask(taskName){
+        return this.tasks.find((task) => task.getTaskTitle === taskName);
+    }
+
+    addTask(newTask){
+        if (this.tasks.find( (task) => task.getTaskTitle === newTask.name)) return;
+        this.tasks.push(newTask);
+    }
+
+    deleteTask(task){
         this.tasks.pop(task);
+    }
+
+    contains (taskName){
+        return this.tasks.find( (task) => task.getTaskTitle === taskName);
     }
 
 }

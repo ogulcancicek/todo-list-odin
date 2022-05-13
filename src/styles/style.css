@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;1,100&display=swap');
 
-*{
+*,html{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -14,10 +14,8 @@
     --darkTextColor: rgb(208, 208, 208);
     --lightTextColor: rgb(37, 37, 37);
     --specialColor: rgb(255, 85, 0);
-}
-
-::selection{
-    background: var(--specialColor);
+    --mobile-sidebarbg-light: rgb(180, 180, 180);
+    --mobile-sidebarbg-dark: rgb(45, 45, 45);
 }
 
 body{
@@ -113,7 +111,7 @@ nav.dark{
 .sidebar{
     display: none;
     width: 250px;
-    height: calc(100vh - 130px);
+    min-height: calc(100vh - 130px);
     border-right: 1px solid;
 }
 .active{
@@ -163,15 +161,6 @@ nav.dark{
     flex-direction: column;
     align-items: center;
     gap: 5px;
-
-    /* hide scrollbar but allow scrolling */
-    -ms-overflow-style: none; /* for Internet Explorer, Edge */
-    scrollbar-width: none; /* for Firefox */
-    overflow-y: scroll; 
-}
-
-.user-projects::-webkit-scrollbar{
-    display: none; /* for Chrome, Safari, and Opera */
 }
 
 .user-projects-title{
@@ -227,21 +216,11 @@ nav.dark{
 
 .todo-container{
     width: 100%;
-    height: calc(100vh - 100px);
+    min-height: calc(100vh - 100px);
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    /* hide scrollbar but allow scrolling */
-    -ms-overflow-style: none; /* for Internet Explorer, Edge */
-    scrollbar-width: none; /* for Firefox */
-    overflow-y: scroll; 
 }
-
-.todo-container::-webkit-scrollbar{
-    display: none; /* for Chrome, Safari, and Opera */
-}
-
 
 .todo-content-container{
     width: 80%;
@@ -299,6 +278,8 @@ nav.dark{
 .task-container{
     display: flex;
     flex-direction: row;
+    gap: 5px;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
     min-height: 50px;
@@ -308,11 +289,14 @@ nav.dark{
 
 .task-option-container{
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 5px;
     margin-right: 4px;
 }
 
-.task-option-container > button{
+.task-remove-button{
+    background-color: rgba(255, 122, 122, 0.7);
     width: 40px;
     height: 40px;
     border: 0;
@@ -321,15 +305,58 @@ nav.dark{
     font-size: 1.3rem;
 }
 
-.task-remove-button{
-    background-color: rgba(255, 122, 122, 0.7);
+.due-date{
+    cursor: pointer;
+    height: 100%;
+    padding-top: 15px;
+    font-size: 0.8rem;
+}
+
+.due-date.active{
+    display: none;
+}
+
+.task-date-input{
+    display: none;
+    width: 75px;
+    font-size: 0.8rem;
+    font-style: normal;
+    height: 20px;
+}
+
+.task-date-input.active{
+    display: inline;
+}
+
+.task-title-container{
+    max-width: 70%;
 }
 
 .task-title{
-    max-width: 80%;
     margin-left: 10px;
     font-style: normal;
     margin-bottom: 0;
+}
+
+.task-title.active{
+    display: none;
+}
+
+.task-title-input{
+    display: none;
+    margin-left: 10px;
+    width: 200px;
+    border-radius: 10px;
+    border: 0;
+    text-indent: 10px;
+}
+
+.task-title-input:focus{
+    outline: 0;
+}
+
+.task-title-input.active{
+    display: inline;
 }
 
 footer{
@@ -354,7 +381,7 @@ footer{
     }
 
     .app-container{
-        height: calc(100vh - 83.5px);
+        min-height: calc(100vh - 83.5px);
         flex-direction: column;
     }
 
@@ -364,12 +391,54 @@ footer{
 
     .sidebar{
         width: 100%;
-        height: 120px;
+        min-height: 100px;
         border-right: 0;
-        border-bottom: 1px solid;
+        border-bottom: 0;
+        background-color: var(--mobile-sidebarbg-light);
+        margin-top: 0;
+    }
+
+    .sidebar.dark{
+        background-color: var(--mobile-sidebarbg-dark);
+    }
+
+    .sidebar-item-container{
+        width: 100%;
+        left: 0;
+        gap: 10px;
+        border-bottom: 0;
+    }
+    
+    .sidebar-item{
+        width: 80%;
+        border: 0px;
+        background-color: transparent;
+        border-radius: 50px;
+        text-align: left;
+    }
+
+    .user-projects{
+        margin-top: 10px;
+        gap: 5px;
+    }
+
+    .user-projects-title{
+        width: 80%;
+        text-decoration: underline;
+        font-size: 1rem;
+        font-style: normal;
+        margin-top: 10px;
     }
     .todo-container{
         width: 100%;
+    }
+    .todo-content-container{
+        width: 90%;
+    }
+    .task-remove-button{
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
     }
 
     .footer-text{

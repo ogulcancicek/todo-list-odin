@@ -1,10 +1,33 @@
 import Project from "./Project";
 import Task from "./Task";
-import TodoList from "./TodoList";
+import Storage from "./Storage";
+
 
 const displayController = ((doc) => {
     const CONTENT_COTNAINER = doc.querySelector('#content');
-    const CURRENT_THEME = 'ligh';
+
+    const loadProjects = () => {
+        const userPorjectsContainer = doc.querySelector('.user-projects');
+        const projectAddBtn = doc.querySelector('.project-add-btn');
+
+        Storage.getTodoList().getProjects().forEach ( (project) => {
+            if (project.name !== 'Inbox' && project.name !== 'Today' && project.name !== 'This Week'){
+                userPorjectsContainer.insertBefore(createNewProjectContainer(project.name),projectAddBtn);
+            }
+
+        });
+       
+    }
+
+    const loadTasks = (projectName) => {
+        const userPorjectsContainer = doc.querySelector('.todo-content-container');
+        const taskAddBtn = doc.querySelector('.task-add-btn');
+
+        clearCurrentProjectDisplay();
+        Storage.getTodoList().getProject(projectName).getTasks().forEach( (task) => {
+            userPorjectsContainer.insertBefore(createNewTaskContainer(task.getTaskTitle, task.getDueDate), taskAddBtn);
+        })
+    }
 
     const createNavBar = () => {
         const navbar = doc.createElement('nav');
@@ -67,8 +90,8 @@ const displayController = ((doc) => {
 
     const createSideBar = () => {
         const sidebar = doc.createElement('div');
-        sidebar.classList.add('sidebar','active');
-
+        sidebar.classList.add('sidebar');
+        
         // Append sidebar content into sidebar
         createSidebarContent(sidebar);
 
@@ -178,7 +201,7 @@ const displayController = ((doc) => {
         const newProjectInput = doc.createElement('input');
         newProjectInput.setAttribute('type', 'text');
         newProjectInput.setAttribute('placeholder', 'New Task');
-        newProjectInput.setAttribute('maxlength', '128');
+        newProjectInput.setAttribute('maxlength', '64');
 
         newProjectPopupContainer.appendChild(newProjectInput);
 
@@ -207,35 +230,66 @@ const displayController = ((doc) => {
         const projectBtn = doc.createElement('button');
         projectBtn.classList.add('sidebar-item', 'project-item');
         projectBtn.textContent = projectName;
-        
+        projectBtn.addEventListener('click', changeCurrentProject);
+
         return projectBtn;
     }
 
-    const createNewTaskContainer = (newTaskTitle) => {
+    const createNewTaskContainer = (newTaskTitle, taskDueDate) => {
         const singleTaskContainer = doc.createElement('div');
         singleTaskContainer.classList.add('task-container');
 
+        const taskTitleContainer = doc.createElement('div');
+        taskTitleContainer.classList.add('task-title-container');
+        
         const taskTitle = doc.createElement('p');
         taskTitle.classList.add('task-title');
         taskTitle.textContent = newTaskTitle;
 
+        taskTitle.addEventListener('click', openTaskTitleInput);
+        taskTitleContainer.appendChild(taskTitle);
+
+        const taskTitleInput = doc.createElement('input');
+        taskTitleInput.setAttribute('id','set-task-title');
+        taskTitleInput.setAttribute('type','text');
+        taskTitleInput.classList.add('task-title-input');
+
+        taskTitleInput.addEventListener('keypress', setTaskTitle)
+        taskTitleContainer.appendChild(taskTitleInput);
+
         const optionContainer = doc.createElement('div');
         optionContainer.classList.add('task-option-container');
 
-        const settingBtn = doc.createElement('button');
-        settingBtn.classList.add('task-setting-button');
-        settingBtn.innerHTML = `<i class="fa-solid fa-gear"></i>`;
-        settingBtn.addEventListener('click', openTaskSettings);
+        const dueDateContainer = doc.createElement('div');
+        dueDateContainer.classList.add('due-date-container');
+        const dueDate = doc.createElement('p');
+        dueDate.classList.add('due-date');
+        if (taskDueDate === ''){
+            dueDate.textContent = "No date";
+        }else{
+            dueDate.textContent = taskDueDate;
+        }
+        
+        dueDate.addEventListener('click',openDuedateInput,false);
+        dueDateContainer.appendChild(dueDate);
+
+        const dateInput = doc.createElement('input');
+        dateInput.setAttribute('id','dateInput');
+        dateInput.setAttribute('type','date');
+        dateInput.classList.add('task-date-input');
+        
+        dateInput.addEventListener('change', setTaskDate, false);
+        dueDateContainer.appendChild(dateInput);
 
         const removeBtn = doc.createElement('button');
         removeBtn.classList.add('task-remove-button');
         removeBtn.textContent = 'X';
         removeBtn.addEventListener('click',removeCurrentTask, false);
 
-        optionContainer.appendChild(settingBtn);
+        optionContainer.appendChild(dueDateContainer);
         optionContainer.appendChild(removeBtn);
 
-        singleTaskContainer.appendChild(taskTitle);
+        singleTaskContainer.appendChild(taskTitleContainer);
         singleTaskContainer.appendChild(optionContainer);
 
         return singleTaskContainer;
@@ -252,16 +306,22 @@ const displayController = ((doc) => {
         
         if (projectName === ''){
             alert("Project name can't be empty");
-            return false;
-        }else{
-            const newProject = new Project(projectName); // Have to save this project into local storage
-            userPorjectsContainer.insertBefore(createNewProjectContainer(projectName), projectAddBtn);
-            closeNewProjectPopup();
-            return true;
+            return;
         }
+
+        if (Storage.getTodoList().contains(projectName)){
+            inputContainer.value = ""
+            alert('Project names must be different!');
+            return;
+        }
+        Storage.addProject(new Project(projectName));
+        userPorjectsContainer.insertBefore(createNewProjectContainer(projectName), projectAddBtn);
+        closeNewProjectPopup();
+        return;
     }
 
     const createNewTask = () => {
+        const projectName = doc.querySelector('.todo-list-title').textContent;
         const userPorjectsContainer = doc.querySelector('.todo-content-container');
         const taskAddBtn = doc.querySelector('.task-add-btn');
 
@@ -270,13 +330,20 @@ const displayController = ((doc) => {
         
         if (taskTitle === ''){
             alert("Task title can't be empty");
-            return false;
-        }else{
-            const newTask = new Task(taskTitle, ''); // Have to save this project into local storage
-            userPorjectsContainer.insertBefore(createNewTaskContainer(taskTitle), taskAddBtn);
-            closeNewTaskPopup();
-            return true;
+            return;
         }
+
+        if (Storage.getTodoList().getProject(projectName).contains(taskTitle)){
+            alert('Task names must be different!');
+            inputContainer.value = '';
+            return;
+        }
+
+        Storage.addTask(projectName, new Task(taskTitle, ''))
+        userPorjectsContainer.insertBefore(createNewTaskContainer(taskTitle), taskAddBtn);
+        closeNewTaskPopup();
+        return;
+        
     }
 
     // Display Functions
@@ -293,6 +360,7 @@ const displayController = ((doc) => {
                 sideItem.classList.toggle('dark');
             });
             doc.querySelector('.task-add-btn').classList.toggle('dark');
+            doc.querySelector('.sidebar').classList.toggle('dark');
         });
         
         navbarContent.appendChild(themeToggleBtn);
@@ -332,6 +400,36 @@ const displayController = ((doc) => {
         todoContainer.appendChild(todoContentContainer);
     }
 
+    const setTaskDate = (e) => {
+        const duedateInput = e.target;
+        const newDueDate = duedateInput.value;
+
+        const currentProjectName = doc.querySelector('.todo-list-title').textContent;
+        const taskTitle = duedateInput.parentNode.parentNode.parentNode.querySelector('.task-title').textContent;
+        
+        duedateInput.classList.toggle('active'); // display: none
+        const dueDate = e.target.parentNode.querySelector('.due-date');
+        dueDate.classList.toggle('active'); // display: inline
+
+        Storage.setTaskDate(currentProjectName, taskTitle, newDueDate);
+        dueDate.textContent = newDueDate;
+    }
+
+    const setTaskTitle = (e) => {
+        const currentProjectName = doc.querySelector('.todo-list-title').textContent;
+        const newTaskTitle = e.target.value;
+        if (e.key !== "Enter") return;
+        if (e.target.value === ""){
+            alert("Task title can't be empty");
+            return
+        }
+        e.target.classList.toggle('active'); // display: none
+        const taskTitle = e.target.parentNode.querySelector('.task-title');
+        taskTitle.classList.toggle('active'); // display: inline
+        Storage.renameTask(currentProjectName, taskTitle.textContent, newTaskTitle);
+        taskTitle.textContent = newTaskTitle;
+    }
+
     const displayFooter = () => CONTENT_COTNAINER.appendChild(createFooter());
 
     const controlSidebar = () => {
@@ -361,8 +459,15 @@ const displayController = ((doc) => {
         doc.querySelector('.task-popup > input').value = "";
     }
 
-    const openTaskSettings = () => {
-        console.log('AA');
+    const openDuedateInput = (e) => {
+        e.target.classList.toggle('active');
+        e.target.parentNode.querySelector(".task-date-input").classList.toggle('active');
+    }
+
+    const openTaskTitleInput = (e) => {
+        e.target.classList.toggle('active');
+        e.target.parentNode.querySelector(".task-title-input").classList.toggle('active');
+        e.target.parentNode.querySelector(".task-title-input").value = e.target.textContent;
     }
 
     const removeCurrentTask = (e) => {
@@ -372,23 +477,44 @@ const displayController = ((doc) => {
         todoContainer.removeChild(parentNode);
     }
 
+    const changeCurrentProject = (e) => {
+        const currentProjectName = doc.querySelector('.todo-list-title');
+        const selectedProjectName = e.target.textContent;
+        currentProjectName.textContent = selectedProjectName;
+        loadTasks(selectedProjectName);
+
+        if (window.outerWidth <= 650){
+            controlSidebar();
+        }
+    }
+
+    const clearCurrentProjectDisplay = () => {
+        const userPorjectsContainer = doc.querySelector('.todo-content-container');
+        const taskContainers = doc.querySelectorAll('.task-container');
+
+        taskContainers.forEach( (taskContainer) => {
+            userPorjectsContainer.removeChild(taskContainer);
+        })
+    }
+
+
     // Display whole website UI
-    const InitializeWebsiteLayout = () => {
+    const InitializeWebsiteLayout = (currentProject = 'Inbox') => {
         displayNavBar();
         displayToggleBtn();
         displayNavLogo();
         displayThemeCheckbox();
         displayAppLayout();
         displayFooter();
+        loadProjects();
+        loadTasks(currentProject);
     }
 
     // Setting Event Listeners
     const setEventListenersSidebar = () => {
-        const sidebarItemContainer = doc.querySelector('.sidebar-item-container');
-        sidebarItemContainer.querySelectorAll('.sidebar-item').forEach( (sidebarItem) => {
-            sidebarItem.addEventListener('click', () => {
-                console.log('aa');
-            })
+        const sidebarItems = doc.querySelector('.sidebar-item-container');
+        sidebarItems.querySelectorAll('.sidebar-item').forEach( (sidebarItem) => {
+            sidebarItem.addEventListener('click', changeCurrentProject);
         });
 
         // Must open object creating popout !!!!!
