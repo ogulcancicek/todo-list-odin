@@ -340,7 +340,7 @@ const displayController = ((doc) => {
         }
 
         Storage.addTask(projectName, new Task(taskTitle, ''))
-        userPorjectsContainer.insertBefore(createNewTaskContainer(taskTitle), taskAddBtn);
+        userPorjectsContainer.insertBefore(createNewTaskContainer(taskTitle, ''), taskAddBtn);
         closeNewTaskPopup();
         return;
         
@@ -471,8 +471,16 @@ const displayController = ((doc) => {
     }
 
     const removeCurrentTask = (e) => {
+        const currentProject = doc.querySelector('.todo-list-title');
         const todoContainer = doc.querySelector('.todo-content-container');
         const parentNode = e.target.parentNode.parentNode;
+        const taskTitle = parentNode.querySelector('.task-title').textContent;
+
+        const taskToDelete = Storage.getTodoList()
+                                    .getProject(currentProject.textContent)
+                                    .getTask(taskTitle);
+                                    
+        Storage.deleteTask(currentProject.textContent, taskToDelete);
 
         todoContainer.removeChild(parentNode);
     }
